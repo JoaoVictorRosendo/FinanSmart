@@ -1,0 +1,101 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    var ptBR = System.Globalization.CultureInfo.GetCultureInfo("pt-BR");
+}
+
+<div class="page-header">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Seu resumo financeiro pessoal</p>
+</div>
+
+<div class="cards-grid">
+    <div class="card card-balance">
+        <div class="card-icon">💰</div>
+        <div class="card-info">
+            <span class="card-label">Saldo Atual</span>
+            <span class="card-value @(Model.Balance >= 0 ? "positive" : "negative")">
+                @Model.Balance.ToString("C", ptBR)
+            </span>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-icon">📈</div>
+        <div class="card-info">
+            <span class="card-label">Total de Receitas</span>
+            <span class="card-value positive">@Model.TotalIncome.ToString("C", ptBR)</span>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-icon">📉</div>
+        <div class="card-info">
+            <span class="card-label">Total de Despesas</span>
+            <span class="card-value negative">@Model.TotalExpenses.ToString("C", ptBR)</span>
+        </div>
+    </div>
+</div>
+
+@if (Model.Rates != null)
+{
+    <div class="section-title">💱 Cotações do Dia</div>
+    <div class="cards-grid">
+        @if (Model.Rates.UsdBrl != null)
+        {
+            <div class="card">
+                <div class="card-icon">🇺🇸</div>
+                <div class="card-info">
+                    <span class="card-label">Dólar (USD)</span>
+                    <span class="card-value">R$ @Model.Rates.UsdBrl.BidValue.ToString("F2")</span>
+                    @if (Model.Balance > 0 && Model.Rates.UsdBrl.BidValue > 0)
+                    {
+                        <span class="card-sub">Seu saldo ≈ US$ @((Model.Balance / Model.Rates.UsdBrl.BidValue).ToString("F2"))</span>
+                    }
+                </div>
+            </div>
+        }
+        @if (Model.Rates.EurBrl != null)
+        {
+            <div class="card">
+                <div class="card-icon">🇪🇺</div>
+                <div class="card-info">
+                    <span class="card-label">Euro (EUR)</span>
+                    <span class="card-value">R$ @Model.Rates.EurBrl.BidValue.ToString("F2")</span>
+                    @if (Model.Balance > 0 && Model.Rates.EurBrl.BidValue > 0)
+                    {
+                        <span class="card-sub">Seu saldo ≈ €@((Model.Balance / Model.Rates.EurBrl.BidValue).ToString("F2"))</span>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<div class="section-title">📋 Últimas Transações</div>
+@if (!Model.RecentTransactions.Any())
+{
+    <div class="empty-state">
+        <p>Nenhuma transação registrada ainda.</p>
+        <a href="/Home/Transacoes" class="btn btn-primary">Adicionar primeira transação</a>
+    </div>
+}
+else
+{
+    <div class="transaction-list">
+        @foreach (var t in Model.RecentTransactions)
+        {
+            <div class="transaction-item">
+                <div class="transaction-icon">@(t.Type == TransactionType.Income ? "📈" : "📉")</div>
+                <div class="transaction-details">
+                    <span class="transaction-desc">@t.Description</span>
+                    <span class="transaction-cat">@t.Category · @t.Date.ToString("dd/MM/yyyy")</span>
+                </div>
+                <span class="transaction-amount @(t.Type == TransactionType.Income ? "positive" : "negative")">
+                    @(t.Type == TransactionType.Income ? "+" : "-")@t.Amount.ToString("C", ptBR)
+                </span>
+            </div>
+        }
+    </div>
+    <div style="margin-top:1rem">
+        <a href="/Home/Transacoes" class="btn btn-secondary">Ver todas →</a>
+    </div>
+}

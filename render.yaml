@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: finansmart
+    runtime: dotnet
+    buildCommand: dotnet publish src/FinanSmart/FinanSmart.csproj -c Release -o ./publish
+    startCommand: dotnet ./publish/FinanSmart.dll
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: ASPNETCORE_URLS
+        value: http://0.0.0.0:10000

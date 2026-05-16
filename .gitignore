@@ -1,0 +1,13 @@
+bin/
+obj/
+*.user
+.vs/
+.idea/
+.vscode/
+publish/
+data/
+*.log
+.DS_Store
+Thumbs.db
+
+.fake

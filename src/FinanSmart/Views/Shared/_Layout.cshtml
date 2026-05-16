@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] – FinanSmart</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="app-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo">💰</span>
+                <h2>FinanSmart</h2>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="/" class="@(Context.Request.Path == "/" ? "active" : "")">
+                        🏠 Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="/Home/Transacoes" class="@(Context.Request.Path.StartsWithSegments("/Home/Transacoes") ? "active" : "")">
+                        📋 Transações
+                    </a>
+                </li>
+                <li>
+                    <a href="/Cambio" class="@(Context.Request.Path.StartsWithSegments("/Cambio") ? "active" : "")">
+                        💱 Câmbio
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <main class="main-content">
+            @RenderBody()
+        </main>
+    </div>
+</body>
+</html>

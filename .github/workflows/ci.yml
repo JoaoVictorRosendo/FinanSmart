@@ -1,0 +1,42 @@
+name: CI – Build, Lint & Test
+
+on:
+  push:
+    branches: ["main", "entrega-intermediaria"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-and-test:
+    name: Build, Lint & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Restaurar dependências
+        run: dotnet restore FinanSmart.sln
+
+      - name: Build
+        run: dotnet build FinanSmart.sln --configuration Release --no-restore
+
+      - name: Executar testes
+        run: dotnet test tests/FinanSmart.Tests/FinanSmart.Tests.csproj --configuration Release --no-build --verbosity normal
+
+  deploy:
+    name: Deploy para Render
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Notificar Render para redeploy
+        run: |
+          echo "Deploy disparado automaticamente pelo Render via GitHub integration."
+          echo "Acesse https://render.com e conecte o repositório para deploy automático."

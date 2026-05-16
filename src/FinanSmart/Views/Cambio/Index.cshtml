@@ -1,0 +1,82 @@
+@model AwesomeApiResponse?
+@{
+    ViewData["Title"] = "Câmbio";
+    var ptBR = System.Globalization.CultureInfo.GetCultureInfo("pt-BR");
+    var balance = (decimal)(ViewBag.Balance ?? 0m);
+}
+
+<div class="page-header">
+    <h1>💱 Cotações em Tempo Real</h1>
+    <p class="subtitle">Dados fornecidos pela <strong>AwesomeAPI</strong></p>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <div class="error-card">
+        <p>⚠️ @ViewBag.Error</p>
+        <a href="/Cambio" class="btn btn-primary">Tentar novamente</a>
+    </div>
+}
+else if (Model != null)
+{
+    <div class="cards-grid">
+        @if (Model.UsdBrl != null)
+        {
+            <div class="card card-rate">
+                <div class="rate-header">
+                    <span class="flag">🇺🇸</span>
+                    <span class="currency-name">Dólar Americano</span>
+                    <span class="currency-code">USD → BRL</span>
+                </div>
+                <div class="rate-value">R$ @Model.UsdBrl.BidValue.ToString("F4")</div>
+                <div class="rate-updated">@Model.UsdBrl.UpdatedAt</div>
+            </div>
+        }
+        @if (Model.EurBrl != null)
+        {
+            <div class="card card-rate">
+                <div class="rate-header">
+                    <span class="flag">🇪🇺</span>
+                    <span class="currency-name">Euro</span>
+                    <span class="currency-code">EUR → BRL</span>
+                </div>
+                <div class="rate-value">R$ @Model.EurBrl.BidValue.ToString("F4")</div>
+                <div class="rate-updated">@Model.EurBrl.UpdatedAt</div>
+            </div>
+        }
+    </div>
+
+    @if (balance > 0)
+    {
+        <div class="section-title">📊 Seu saldo em outras moedas</div>
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">💰</div>
+                <div class="card-info">
+                    <span class="card-label">Saldo em BRL</span>
+                    <span class="card-value">@balance.ToString("C", ptBR)</span>
+                </div>
+            </div>
+            @if (Model.UsdBrl != null && Model.UsdBrl.BidValue > 0)
+            {
+                <div class="card">
+                    <div class="card-icon">🇺🇸</div>
+                    <div class="card-info">
+                        <span class="card-label">Equivalente em USD</span>
+                        <span class="card-value">US$ @((balance / Model.UsdBrl.BidValue).ToString("F2"))</span>
+                    </div>
+                </div>
+            }
+            @if (Model.EurBrl != null && Model.EurBrl.BidValue > 0)
+            {
+                <div class="card">
+                    <div class="card-icon">🇪🇺</div>
+                    <div class="card-info">
+                        <span class="card-label">Equivalente em EUR</span>
+                        <span class="card-value">€@((balance / Model.EurBrl.BidValue).ToString("F2"))</span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
