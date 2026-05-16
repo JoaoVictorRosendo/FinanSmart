@@ -15,7 +15,7 @@ jobs:
       - name: Checkout código
         uses: actions/checkout@v4
 
-      - name: Setup .NET 8
+      - name: Setup .NET 10
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
@@ -24,10 +24,10 @@ jobs:
         run: dotnet restore FinanSmart.sln
 
       - name: Build
-        run: dotnet build FinanSmart.sln --configuration Release --no-restore
+        run: dotnet build FinanSmart.sln --configuration Release
 
       - name: Executar testes
-        run: dotnet test tests/FinanSmart.Tests/FinanSmart.Tests.csproj --configuration Release --no-build --verbosity normal
+        run: dotnet test tests/FinanSmart.Tests/FinanSmart.Tests.csproj --configuration Release --verbosity normal
 
   deploy:
     name: Deploy para Render
@@ -36,7 +36,5 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
-      - name: Notificar Render para redeploy
-        run: |
-          echo "Deploy disparado automaticamente pelo Render via GitHub integration."
-          echo "Acesse https://render.com e conecte o repositório para deploy automático."
+      - name: Deploy
+        run: echo "Deploy via Render.com integração automática com GitHub."
