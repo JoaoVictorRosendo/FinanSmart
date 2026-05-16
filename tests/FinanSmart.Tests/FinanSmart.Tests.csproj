@@ -8,20 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageReference Include="xunit" Version="2.6.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.4" PrivateAssets="all" />
-    <PackageReference Include="Moq" Version="4.20.69" />
-    <PackageReference Include="coverlet.collector" Version="6.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" PrivateAssets="all" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\src\FinanSmart\Models\Transaction.cs" />
-    <Compile Include="..\..\src\FinanSmart\Models\ExchangeRate.cs" />
-    <Compile Include="..\..\src\FinanSmart\Models\ViewModels.cs" />
-    <Compile Include="..\..\src\FinanSmart\Services\ITransactionService.cs" />
-    <Compile Include="..\..\src\FinanSmart\Services\IExchangeRateService.cs" />
-    <Compile Include="..\..\src\FinanSmart\Services\ExchangeRateService.cs" />
+    <ProjectReference Include="..\..\src\FinanSmart\FinanSmart.csproj" />
   </ItemGroup>
 
 </Project>
