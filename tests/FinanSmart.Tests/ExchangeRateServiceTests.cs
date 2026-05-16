@@ -1,3 +1,4 @@
+using Xunit;
 using System.Net;
 using System.Text;
 using FinanSmart.Services;
@@ -20,7 +21,6 @@ public class ExchangeRateServiceTests
                 StatusCode = HttpStatusCode.OK,
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             });
-
         return new HttpClient(handler.Object);
     }
 
@@ -33,10 +33,8 @@ public class ExchangeRateServiceTests
             "EURBRL": { "code":"EUR","name":"Euro","bid":"5.7000","ask":"5.7100","create_date":"2025-06-01 10:00:00" }
         }
         """;
-
         var service = new ExchangeRateService(CreateMockedClient(json));
         var result = await service.GetRatesAsync();
-
         Assert.NotNull(result);
         Assert.NotNull(result.UsdBrl);
         Assert.NotNull(result.EurBrl);
@@ -53,10 +51,8 @@ public class ExchangeRateServiceTests
             "EURBRL": { "code":"EUR","name":"Euro","bid":"5.8900","ask":"5.9000","create_date":"2025-06-01 10:00:00" }
         }
         """;
-
         var service = new ExchangeRateService(CreateMockedClient(json));
         var result = await service.GetRatesAsync();
-
         Assert.Equal(5.3142m, result!.UsdBrl!.BidValue);
     }
 
@@ -69,9 +65,7 @@ public class ExchangeRateServiceTests
                 ItExpr.IsAny<HttpRequestMessage>(),
                 ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.ServiceUnavailable });
-
         var service = new ExchangeRateService(new HttpClient(handler.Object));
-
         await Assert.ThrowsAnyAsync<Exception>(() => service.GetRatesAsync());
     }
 }
